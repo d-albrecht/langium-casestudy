@@ -1,0 +1,57 @@
+{
+  "name": "custom-predicate",
+  "scopeName": "source.custom-predicate",
+  "fileTypes": [
+    ".pred"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.custom-predicate",
+      "match": "\\b(Hello|person)\\b"
+    },
+    {
+      "name": "string.quoted.double.custom-predicate",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "string.quoted.single.custom-predicate",
+      "begin": "'",
+      "end": "'"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.custom-predicate",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.custom-predicate"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.custom-predicate"
+            }
+          }
+        },
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.custom-predicate"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.custom-predicate"
+        }
+      ]
+    }
+  }
+}

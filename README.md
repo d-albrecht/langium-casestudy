@@ -69,3 +69,10 @@ Milestone 3 might in practice not be in reach in the (time) scope I'm targetting
 
 Milestone 2 has several graduations itself. While the pegjs-parser doesn't construct an explicit AST, Langium does, and while the dsl isn't ambiguous, the expressions can get pretty complex. So, one might want to simplify the AST before focussing on any re-writes. With this being my first contact with Langium, I'm not sure yet, how easy working with the AST really is.
 
+## First impressions of Languium
+
+Langium has some features that immediately make the generation of a parser way easier:
+- Langium has hidden terminals that allow me to completely ignore certain characters like white-spaces. In the current pegjs-powered parser I have to add potential white-spaces at every possible position in order to allow them there. In Langium you can "enable" such amenities with a global definition.
+- In the same way are comments trivial. The pegjs-powered parser never got any comment-definitions because similarly to white-spaces you have to expliitly allow them anywhere they could be placed. For Langium all you need is to choose some opening and closing delimiters and add a global definition and comments are handled.
+- Langium comes with some validation features out of the box. Namely the cross-reference capability. The pegjs-powered parser can save information similarly to a let-expresion in Lisp. But if the filtering expression recalls some of these stored values, the parser will not check if the used index is bound to anything at this point. And while the storage is meant to be scoped and I don't know yet if Langium can accomplish this, the framework can at least check, whether this index is bound somewhere at all, though possibly out of scope.
+

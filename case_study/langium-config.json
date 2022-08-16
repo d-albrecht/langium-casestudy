@@ -1,0 +1,12 @@
+{
+    "projectName": "CustomPredicate",
+    "languages": [{
+        "id": "custom-predicate",
+        "grammar": "src/language-server/custom-predicate.langium",
+        "fileExtensions": [".pred"],
+        "textMate": {
+            "out": "syntaxes/custom-predicate.tmLanguage.json"
+        }
+    }],
+    "out": "src/language-server/generated"
+}
