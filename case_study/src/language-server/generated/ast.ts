@@ -5,22 +5,44 @@
 
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { AstNode, AstReflection, Reference, isAstNode, TypeMetaData } from 'langium';
+import { AstNode, AstReflection, isAstNode, TypeMetaData } from 'langium';
 
-export interface Greeting extends AstNode {
-    readonly $container: Model;
-    person: Reference<Person>
+export interface Bid extends AstNode {
+    readonly $container: Bind;
+    id: number
 }
 
-export const Greeting = 'Greeting';
+export const Bid = 'Bid';
 
-export function isGreeting(item: unknown): item is Greeting {
-    return reflection.isInstance(item, Greeting);
+export function isBid(item: unknown): item is Bid {
+    return reflection.isInstance(item, Bid);
+}
+
+export interface Bind extends Binds {
+    readonly $container: Binds | Model;
+    field: string
+    id: Bid
+}
+
+export const Bind = 'Bind';
+
+export function isBind(item: unknown): item is Bind {
+    return reflection.isInstance(item, Bind);
+}
+
+export interface Binds extends AstNode {
+    readonly $container: Binds | Model;
+    fields: Array<Bind>
+}
+
+export const Binds = 'Binds';
+
+export function isBinds(item: unknown): item is Binds {
+    return reflection.isInstance(item, Binds);
 }
 
 export interface Model extends AstNode {
-    greetings: Array<Greeting>
-    persons: Array<Person>
+    binds: Array<Binds>
 }
 
 export const Model = 'Model';
@@ -29,25 +51,14 @@ export function isModel(item: unknown): item is Model {
     return reflection.isInstance(item, Model);
 }
 
-export interface Person extends AstNode {
-    readonly $container: Model;
-    name: string
-}
+export type CustomPredicateAstType = 'Bid' | 'Bind' | 'Binds' | 'Model';
 
-export const Person = 'Person';
-
-export function isPerson(item: unknown): item is Person {
-    return reflection.isInstance(item, Person);
-}
-
-export type CustomPredicateAstType = 'Greeting' | 'Model' | 'Person';
-
-export type CustomPredicateAstReference = 'Greeting:person';
+export type CustomPredicateAstReference = never;
 
 export class CustomPredicateAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Greeting', 'Model', 'Person'];
+        return ['Bid', 'Bind', 'Binds', 'Model'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -59,6 +70,9 @@ export class CustomPredicateAstReflection implements AstReflection {
             return true;
         }
         switch (subtype) {
+            case Bind: {
+                return this.isSubtype(Binds, supertype);
+            }
             default: {
                 return false;
             }
@@ -67,9 +81,6 @@ export class CustomPredicateAstReflection implements AstReflection {
 
     getReferenceType(referenceId: CustomPredicateAstReference): string {
         switch (referenceId) {
-            case 'Greeting:person': {
-                return Person;
-            }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
             }
@@ -78,12 +89,27 @@ export class CustomPredicateAstReflection implements AstReflection {
 
     getTypeMetaData(type: string): TypeMetaData {
         switch (type) {
+            case 'Bind': {
+                return {
+                    name: 'Bind',
+                    mandatory: [
+                        { name: 'fields', type: 'array' }
+                    ]
+                };
+            }
+            case 'Binds': {
+                return {
+                    name: 'Binds',
+                    mandatory: [
+                        { name: 'fields', type: 'array' }
+                    ]
+                };
+            }
             case 'Model': {
                 return {
                     name: 'Model',
                     mandatory: [
-                        { name: 'greetings', type: 'array' },
-                        { name: 'persons', type: 'array' }
+                        { name: 'binds', type: 'array' }
                     ]
                 };
             }

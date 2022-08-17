@@ -1,8 +1,10 @@
-person Alice
+/*person Alice
 Hello Alice!
 
 person Bob
 Hello Bob!
 
 person Alex
-Hello Alex!
+Hello Alex!*/
+
+@@( @Test#1234 @Other#42 )

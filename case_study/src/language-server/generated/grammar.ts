@@ -16,33 +16,16 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
       "name": "Model",
       "entry": true,
       "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "persons",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Person"
-              },
-              "arguments": []
-            }
+        "$type": "Assignment",
+        "feature": "binds",
+        "operator": "+=",
+        "terminal": {
+          "$type": "RuleCall",
+          "rule": {
+            "$refText": "Binds"
           },
-          {
-            "$type": "Assignment",
-            "feature": "greetings",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Greeting"
-              },
-              "arguments": []
-            }
-          }
-        ],
+          "arguments": []
+        },
         "cardinality": "*"
       },
       "definesHiddenTokens": false,
@@ -53,22 +36,82 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
-      "name": "Person",
+      "name": "Binds",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "@@("
+              },
+              {
+                "$type": "Assignment",
+                "feature": "fields",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "Bind"
+                  },
+                  "arguments": []
+                },
+                "cardinality": "+"
+              },
+              {
+                "$type": "Keyword",
+                "value": ")"
+              }
+            ]
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Bind"
+            },
+            "arguments": []
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Bind",
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "person"
+            "value": "@"
           },
           {
             "$type": "Assignment",
-            "feature": "name",
+            "feature": "field",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "ID"
+                "$refText": "FIELD"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "id",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Bid"
               },
               "arguments": []
             }
@@ -84,36 +127,25 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
-      "name": "Greeting",
+      "name": "Bid",
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Hello"
+            "value": "#"
           },
           {
             "$type": "Assignment",
-            "feature": "person",
+            "feature": "id",
             "operator": "=",
             "terminal": {
-              "$type": "CrossReference",
-              "type": {
-                "$refText": "Person"
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "NAT"
               },
-              "terminal": {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "ID"
-                },
-                "arguments": []
-              },
-              "deprecatedSyntax": false
+              "arguments": []
             }
-          },
-          {
-            "$type": "Keyword",
-            "value": "!"
           }
         ]
       },
@@ -126,27 +158,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
-      "hidden": true,
-      "name": "WS",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "\\\\s+"
-      },
-      "fragment": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "ID",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "[_a-zA-Z][\\\\w_]*"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "INT",
+      "name": "NAT",
       "type": {
         "$type": "ReturnType",
         "name": "number"
@@ -160,13 +172,23 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
-      "name": "STRING",
+      "name": "FIELD",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "\\"[^\\"]*\\"|'[^']*'"
+        "regex": "[a-zA-Z0-9_ ]+"
       },
       "fragment": false,
       "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "hidden": true,
+      "name": "WS",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\s+"
+      },
+      "fragment": false
     },
     {
       "$type": "TerminalRule",

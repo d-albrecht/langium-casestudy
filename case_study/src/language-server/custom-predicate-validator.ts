@@ -1,5 +1,5 @@
 import { ValidationAcceptor, ValidationChecks, ValidationRegistry } from 'langium';
-import { CustomPredicateAstType, Person } from './generated/ast';
+import { CustomPredicateAstType, Binds } from './generated/ast';
 import type { CustomPredicateServices } from './custom-predicate-module';
 
 /**
@@ -10,7 +10,7 @@ export class CustomPredicateValidationRegistry extends ValidationRegistry {
         super(services);
         const validator = services.validation.CustomPredicateValidator;
         const checks: ValidationChecks<CustomPredicateAstType> = {
-            Person: validator.checkPersonStartsWithCapital
+            Binds: validator.checkPersonStartsWithCapital
         };
         this.register(checks, validator);
     }
@@ -21,13 +21,13 @@ export class CustomPredicateValidationRegistry extends ValidationRegistry {
  */
 export class CustomPredicateValidator {
 
-    checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
-        if (person.name) {
+    checkPersonStartsWithCapital(person: Binds, accept: ValidationAcceptor): void {
+        /*if (person.name) {
             const firstChar = person.name.substring(0, 1);
             if (firstChar.toUpperCase() !== firstChar) {
                 accept('warning', 'Person name should start with a capital.', { node: person, property: 'name' });
             }
-        }
+        }*/
     }
 
 }

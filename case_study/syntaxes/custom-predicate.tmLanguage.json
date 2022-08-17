@@ -10,17 +10,7 @@
     },
     {
       "name": "keyword.control.custom-predicate",
-      "match": "\\b(Hello|person)\\b"
-    },
-    {
-      "name": "string.quoted.double.custom-predicate",
-      "begin": "\"",
-      "end": "\""
-    },
-    {
-      "name": "string.quoted.single.custom-predicate",
-      "begin": "'",
-      "end": "'"
+      "match": ""
     }
   ],
   "repository": {
