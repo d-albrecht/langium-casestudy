@@ -7,6 +7,26 @@ Hello Bob!
 person Alex
 Hello Alex!*/
 
-@Test#44
-@@( @Text#42 )
-@@( @first#1 @second#2 @third#4 )
+@Test#44 ~> [Test] == "Blub"
+@@( @444565#42 ) ~> [Test] == "Blub"
+@@( @first#1 @second#2 @third#4 ) ~> [Test] == "Blub"
+
+/!/()
+/?/()
+/4~5/()
+/5~-2/()
+/4+/()
+/4./()
+
+/* boolean binary function names are no valid field names anymore!
+{and} == 44*/
+
+\!\(@@( @Field#0815) ~> [Field] !~ #0815)
+
+([Test] == "Blub")
+[Text] != #4
+[Fuzzy] =~ "Contains"
+
+{Value} < #7
+{Value} != -7
+{Value} > 7
