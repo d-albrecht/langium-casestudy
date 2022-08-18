@@ -7,21 +7,10 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { AstNode, AstReflection, isAstNode, TypeMetaData } from 'langium';
 
-export interface Bid extends AstNode {
-    readonly $container: Bind;
-    id: number
-}
-
-export const Bid = 'Bid';
-
-export function isBid(item: unknown): item is Bid {
-    return reflection.isInstance(item, Bid);
-}
-
 export interface Bind extends Binds {
     readonly $container: Binds | Model;
     field: string
-    id: Bid
+    id: number
 }
 
 export const Bind = 'Bind';
@@ -51,14 +40,25 @@ export function isModel(item: unknown): item is Model {
     return reflection.isInstance(item, Model);
 }
 
-export type CustomPredicateAstType = 'Bid' | 'Bind' | 'Binds' | 'Model';
+export interface SignedNat extends AstNode {
+    sign: boolean
+    val: number
+}
+
+export const SignedNat = 'SignedNat';
+
+export function isSignedNat(item: unknown): item is SignedNat {
+    return reflection.isInstance(item, SignedNat);
+}
+
+export type CustomPredicateAstType = 'Bind' | 'Binds' | 'Model' | 'SignedNat';
 
 export type CustomPredicateAstReference = never;
 
 export class CustomPredicateAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Bid', 'Bind', 'Binds', 'Model'];
+        return ['Bind', 'Binds', 'Model', 'SignedNat'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -110,6 +110,14 @@ export class CustomPredicateAstReflection implements AstReflection {
                     name: 'Model',
                     mandatory: [
                         { name: 'binds', type: 'array' }
+                    ]
+                };
+            }
+            case 'SignedNat': {
+                return {
+                    name: 'SignedNat',
+                    mandatory: [
+                        { name: 'sign', type: 'boolean' }
                     ]
                 };
             }

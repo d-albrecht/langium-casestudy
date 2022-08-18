@@ -105,13 +105,17 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             }
           },
           {
+            "$type": "Keyword",
+            "value": "#"
+          },
+          {
             "$type": "Assignment",
             "feature": "id",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "Bid"
+                "$refText": "NAT"
               },
               "arguments": []
             }
@@ -127,17 +131,23 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
-      "name": "Bid",
+      "name": "SignedNat",
       "alternatives": {
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "#"
+            "$type": "Assignment",
+            "feature": "sign",
+            "operator": "?=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "-"
+            },
+            "cardinality": "?"
           },
           {
             "$type": "Assignment",
-            "feature": "id",
+            "feature": "val",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
@@ -172,10 +182,34 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
+      "name": "INT",
+      "type": {
+        "$type": "ReturnType",
+        "name": "number"
+      },
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "-?[0-9]+"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
       "name": "FIELD",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[a-zA-Z0-9_ ]+"
+        "regex": "[a-zA-Z_ ][a-zA-Z0-9_ ]*"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "STRING",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\"[^\\"]*\\"|'[^']*'"
       },
       "fragment": false,
       "hidden": false

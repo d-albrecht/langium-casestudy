@@ -7,4 +7,6 @@ Hello Bob!
 person Alex
 Hello Alex!*/
 
-@@( @Test#1234 @Other#42 )
+@Test#44
+@@( @Text#42 )
+@@( @first#1 @second#2 @third#4 )
