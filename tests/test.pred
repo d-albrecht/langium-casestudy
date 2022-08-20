@@ -30,3 +30,16 @@ Hello Alex!*/
 {Value} < #7
 {Value} != -7
 {Value} > 7
+
+
+[Name] == "Bob" || {Value} == 42
+[Name] == "Bob" and {Value} == 42
+[Name] == "Bob" || not {Value} == 42 && 
+[Address] =~ "Street" ^ {Salary} > 1000
+not ((([Name] == "Bob" || {Value} == 42) && 
+[Address] =~ "Street") ^ {Salary} > 1000)
+
+{42} != 42
+
+[Name] != "Bob" ^ {Value} == 42
+! [Name] !~ "Bob"

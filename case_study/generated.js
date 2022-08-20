@@ -1,0 +1,25 @@
+"use strict";
+
+(o,i,e) => { return brule };
+(o,i,e) => { return brule };
+(o,i,e) => { return brule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rrule };
+(o,i,e) => { return rcrule };
+(o,i,e) => { return (t(o,"Test","Blub",true,true)) };
+(o,i,e) => { return t(o,"Text",i[4],false,true) };
+(o,i,e) => { return t(o,"Fuzzy","Contains",true,false) };
+(o,i,e) => { return n(o,"Value",parseInt(i[7]),[false,false,true]) };
+(o,i,e) => { return n(o,"Value",-7,[true,false]) };
+(o,i,e) => { return n(o,"Value",7,[false,false,false]) };
+(o,i,e) => { return t(o,"Name","Bob",true,true) || n(o,"Value",42,[true,true]) };
+(o,i,e) => { return t(o,"Name","Bob",true,true) && n(o,"Value",42,[true,true]) };
+(o,i,e) => { return t(o,"Name","Bob",true,true) || !n(o,"Value",42,[true,true]) && t(o,"Address","Street",true,false) != n(o,"Salary",1000,[false,false,false]) };
+(o,i,e) => { return !(((t(o,"Name","Bob",true,true) || n(o,"Value",42,[true,true])) && t(o,"Address","Street",true,false)) != n(o,"Salary",1000,[false,false,false])) };
+(o,i,e) => { return n(o,"42",42,[true,false]) };
+(o,i,e) => { return t(o,"Name","Bob",false,true) != n(o,"Value",42,[true,true]) };
+(o,i,e) => { return !t(o,"Name","Bob",false,false) };

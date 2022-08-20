@@ -98,6 +98,24 @@ And all textual boolean binary function names (and, or, xor, not) are no longer 
 
 That said, Milestone 1 should be reached now. The next days I can try to manipulate the ast to produce the textual function definitions that the web application expects from the filtering expressions.
 
+## Step 3
+
+Next I will try to convert the input filtering expression (in dsl format) into a textual representation of a filter predicate (in JS format). Effectively, I will extend the parser I created into a transpiler.
+
+Using the examples included in the Langium repo as a basis, it seems to be common practice to hook into the cli version of the dsl parser. That means, first I have to define a visitor-like type that turns the AST into a string again, and then define this cli hook. At this point, given the complexity of some filtering expressions, I think I should really do the transpiler way and directly write the converted filters into a separate file, if Langium/TS has these capabilities.
+
+Well, apparently I can't change the generated file(s) without reading up on all the details of the process, so I will use the cli process that got created for the Person-Greeting-example and just replace the file content. Therefore, the hook was the easy part and is done.
+
+The first question for the visitor is, how alternative definitions are represented in the AST and if I have to include additional fields in the dsl to differentiate alternatives. For example, how are the quantifiers '!' and '?' stored in the AST and do I have to include the parsed character to differentiate them?
+
+Starting with the top most parser rules it was somewhat trivial to write visitor methods for them. Given that each filtering expression "starts" as an `Or` container, I could see the effects immediately and formatting Or, And, Xor, and Not were easy. But starting with `Not` I had alternative ways that the parser can go down, so here I had to figure out how the actual AST structure looks like. `Xor` has two fields `l` and `r` but both are of type Not. And the type Not doesn't offer ways to access the parsed expression in case the second way was taken (the expression being no `Not` in the first place). Do I have to manually type cast here?
+
+Okay, so there are auto-generated `isType` functions for every type, **but they don't work every time**. It's possible to distinguish all the five concrete Rule-types, but detecting a `Not`-instance is almost always a false positive. I don't know why, but each time the parser found a Not expression, I have - according to the `isNot` function - a Not instance inside another Not instance, and in all other cases a Not instance without its (required) fields being set. These false positives can be prevented by checking `isNot(r) && (r as Not).inner` but then again, what does the `isNot` function if I have to manually check the fields for being set?
+
+But with that implemented I can already output the general boolean structure with all concrete rules being replaced by placeholders at the moment. After some more implementation, all but the three most complex rules can be converted. The rest will have to wait for tomorrow.
+
+As a conclusion for today: Langium is definitely preferable if your use case for the dsl is rather complex. For example, if you have to do several passes over the whole data structures. For this small project I'm working on here, Langium creates additional tasks that wouldn't be strictly necessary. pegjs for example can combine both grammar and converter/visitor in one definition, but therefore doesn't offer the option to do anything else with the constructed (implicit) AST. That means, that even if Milestone 3 is reachable with reasonable effort, I can't really see myself using Langium as a replacement for pegjs. That is, assuming that I could use the same dsl as with pegjs. The fact that the dsl itself had to change, too, is another argument against Langium in its current form.
+
 ## Necessary Changes to the dsl
 
 Here is a list of things that I had to change in the dsl to make it compatible with Langium. Some might just be due to my lack of experience:
@@ -107,3 +125,9 @@ Here is a list of things that I had to change in the dsl to make it compatible w
 - The recursive rules needed a new type of delimiters because otherwise I couldn't use "<" and ">" to compare numerical fields
 - "and", "or", "xor", "not" are no valid field names.
 
+## Conclusion
+
+Some final words:
+- The parts that worked as expected are great! A single definition is sufficient to generate types and a functioning parser. Most other compilers would have this split into several locations.
+- But the parser is limiting itself. If you have one terminal that can be used in several contexts you either have to change the language you're translating, or you have to change the grammar just to appeal to Langium and have to handle the mess when you ultimately travers the AST. At first this might seem not related, but [this video](https://www.youtube.com/watch?v=6qzWm_eoUXM) shows how an in-place sorting algorithm was implemented in a purely immutable language. In this case, sorting a list that isn't referenced elsewhere is fast (because under the hood, the data structures are mutated), sorting a list that is referenced elsewhere will be slower (either because the runtime has to do a deep-copy first or fallback to slower algorithms). But the same applies in both cases, for ROC and for Langium, the internals shouldn't (too much) affect the outer appearence/behavior. And if the current lexer can't do the task, then perhaps it needs to be replaced.
+- A good example for why the lexer is too "narrow-minded": take (almost) any natural language, where the same word can be used in several contexts. In English for example, words like "when" and "where" can start a (temporal or spacial) sub-clause ("I like parks where it isn't too loud, so that I can relax"), or they can be used to start a question ("When do we meet?"). If you wanted to write a grammar for natural languages, you couldn't limit words to one meaning either, just because that is easier for the lexer. But at the same time the grammar has to still be maintainable, so using alternatives in too many places will cause the language to be a legacy language very soon as nobody wants to touch it again.
