@@ -7,6 +7,12 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { AstNode, AstReflection, isAstNode, TypeMetaData } from 'langium';
 
+export type Field = string;
+
+export type Nat = number;
+
+export type Ncomp = string;
+
 export type Predicate = Or;
 
 export const Predicate = 'Predicate';
@@ -31,6 +37,10 @@ export function isRule(item: unknown): item is Rule {
     return reflection.isInstance(item, Rule);
 }
 
+export type Tcomp = string;
+
+export type Trend = string;
+
 export interface And extends AstNode {
     readonly $container: Or;
     inner: Array<Xor>
@@ -44,7 +54,7 @@ export function isAnd(item: unknown): item is And {
 
 export interface Bid extends AstNode {
     readonly $container: Bind | Nval | Tval;
-    id: number
+    id: string
 }
 
 export const Bid = 'Bid';
@@ -55,7 +65,7 @@ export function isBid(item: unknown): item is Bid {
 
 export interface Bind extends Binds {
     readonly $container: Binds | Brule;
-    field: number | string
+    field: Field
     id: Bid
 }
 
@@ -67,7 +77,7 @@ export function isBind(item: unknown): item is Bind {
 
 export interface Binds extends AstNode {
     readonly $container: Binds | Brule;
-    fields: Array<Bind>
+    bindings: Array<Bind>
 }
 
 export const Binds = 'Binds';
@@ -78,8 +88,8 @@ export function isBinds(item: unknown): item is Binds {
 
 export interface Brule extends AstNode {
     readonly $container: Brule | Not | RCrule | Rrule | Xor;
-    binds: Binds
-    group: Group
+    body: Group
+    let: Binds
 }
 
 export const Brule = 'Brule';
@@ -110,9 +120,9 @@ export function isGroup(item: unknown): item is Group {
 }
 
 export interface Int extends AstNode {
-    readonly $container: Nval;
+    readonly $container: Nval | Quantifier;
     sign: boolean
-    val: number
+    val: Nat
 }
 
 export const Int = 'Int';
@@ -134,8 +144,8 @@ export function isNot(item: unknown): item is Not {
 
 export interface Nrule extends AstNode {
     readonly $container: Brule | Not | RCrule | Rrule | Xor;
-    comp: string
-    field: number | string
+    comp: Ncomp
+    field: Field
     val: Nval
 }
 
@@ -170,11 +180,11 @@ export function isOr(item: unknown): item is Or {
 
 export interface Quantifier extends AstNode {
     readonly $container: RCrule | Rrule;
-    f?: '!' | '?'
-    lower?: SignedNat
-    pivot?: SignedNat
-    trend?: string
-    upper?: SignedNat
+    fun?: '?' | string
+    lower?: Int
+    pivot?: Int
+    trend?: Trend
+    upper?: Int
 }
 
 export const Quantifier = 'Quantifier';
@@ -207,22 +217,10 @@ export function isRrule(item: unknown): item is Rrule {
     return reflection.isInstance(item, Rrule);
 }
 
-export interface SignedNat extends AstNode {
-    readonly $container: Quantifier;
-    sign: boolean
-    val: number
-}
-
-export const SignedNat = 'SignedNat';
-
-export function isSignedNat(item: unknown): item is SignedNat {
-    return reflection.isInstance(item, SignedNat);
-}
-
 export interface Trule extends AstNode {
     readonly $container: Brule | Not | RCrule | Rrule | Xor;
-    comp: string
-    field: number | string
+    comp: Tcomp
+    field: Field
     val: Tval
 }
 
@@ -256,14 +254,14 @@ export function isXor(item: unknown): item is Xor {
     return reflection.isInstance(item, Xor);
 }
 
-export type CustomPredicateAstType = 'And' | 'Bid' | 'Bind' | 'Binds' | 'Brule' | 'Filter' | 'Group' | 'Int' | 'Not' | 'Nrule' | 'Nval' | 'Or' | 'Predicate' | 'Quantifier' | 'RCrule' | 'Rpred' | 'Rrule' | 'Rule' | 'SignedNat' | 'Trule' | 'Tval' | 'Xor';
+export type CustomPredicateAstType = 'And' | 'Bid' | 'Bind' | 'Binds' | 'Brule' | 'Filter' | 'Group' | 'Int' | 'Not' | 'Nrule' | 'Nval' | 'Or' | 'Predicate' | 'Quantifier' | 'RCrule' | 'Rpred' | 'Rrule' | 'Rule' | 'Trule' | 'Tval' | 'Xor';
 
 export type CustomPredicateAstReference = never;
 
 export class CustomPredicateAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['And', 'Bid', 'Bind', 'Binds', 'Brule', 'Filter', 'Group', 'Int', 'Not', 'Nrule', 'Nval', 'Or', 'Predicate', 'Quantifier', 'RCrule', 'Rpred', 'Rrule', 'Rule', 'SignedNat', 'Trule', 'Tval', 'Xor'];
+        return ['And', 'Bid', 'Bind', 'Binds', 'Brule', 'Filter', 'Group', 'Int', 'Not', 'Nrule', 'Nval', 'Or', 'Predicate', 'Quantifier', 'RCrule', 'Rpred', 'Rrule', 'Rule', 'Trule', 'Tval', 'Xor'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -322,7 +320,7 @@ export class CustomPredicateAstReflection implements AstReflection {
                 return {
                     name: 'Bind',
                     mandatory: [
-                        { name: 'fields', type: 'array' }
+                        { name: 'bindings', type: 'array' }
                     ]
                 };
             }
@@ -330,7 +328,7 @@ export class CustomPredicateAstReflection implements AstReflection {
                 return {
                     name: 'Binds',
                     mandatory: [
-                        { name: 'fields', type: 'array' }
+                        { name: 'bindings', type: 'array' }
                     ]
                 };
             }
@@ -355,14 +353,6 @@ export class CustomPredicateAstReflection implements AstReflection {
                     name: 'Or',
                     mandatory: [
                         { name: 'inner', type: 'array' }
-                    ]
-                };
-            }
-            case 'SignedNat': {
-                return {
-                    name: 'SignedNat',
-                    mandatory: [
-                        { name: 'sign', type: 'boolean' }
                     ]
                 };
             }

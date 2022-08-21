@@ -1,4 +1,4 @@
-import { And, Bid, Bind, Binds, Brule, Group, Int, isBind, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Or, Predicate, Quantifier, RCrule, Rrule, SignedNat, Trule, Xor } from '../language-server/generated/ast';
+import { And, Bid, Bind, Binds, Brule, Group, Int, isBind, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Or, Predicate, Quantifier, RCrule, Rrule, Trule, Xor } from '../language-server/generated/ast';
 
 export function visitFilter(filter: Predicate): string {
     //this is a slight adaption of the actual format because Langium accepts several rules per file
@@ -96,15 +96,15 @@ function visitNcomp(comp: string): string {
 }
 
 function visitBrule(b: Brule): string {
-    let binds = visitBinds(b.binds);
-    let p = visitRules(b.group);
+    let binds = visitBinds(b.let);
+    let p = visitRules(b.body);
     return "b(o,e,i," + binds + ",function(o,e,i){return " + p + ";})";
 }
 
 function visitBinds(b: Binds): string {
     if (isBind(b))
         return "[" + visitBind(b) + "]";
-    return "[" + b.fields.map(visitBind).join(",") + "]";
+    return "[" + b.bindings.map(visitBind).join(",") + "]";
 }
 
 function visitBind(b: Bind): string {
@@ -124,7 +124,8 @@ function visitRCrule(r: RCrule): string {
 }
 
 function visitQuantifier(q: Quantifier): string {
-    return (q.f) ? ((q.f == "!") ? "[0]" : "[1]") : (
+    // format ints as array [num, sign]
+    return (q.fun) ? ((q.fun == "!") ? "[0]" : "[1]") : (
         (q.lower) ? ("[2," + visitInt(q.lower) + "," + visitInt(q.upper!) + "]") :
         ("[3," + visitInt(q.pivot!) + "," + visitTrend(q.trend!) + "]")
     );
@@ -139,12 +140,12 @@ function visitTrend(t: string): string {
         case '.':
             return "0";
         default:
-            return "error";
+            return "0";
     }
 }
 
-function visitInt(int: Int | SignedNat): string {
-    return ((int.sign) ? "-" : "") + int.val.toString()
+function visitInt(int: Int): string {
+    return ((int.sign) ? "-" : "") + parseInt(int.val.toString()).toString()
 }
 
 function visitBid(bid: Bid, num: boolean): string {

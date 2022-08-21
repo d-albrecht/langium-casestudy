@@ -11,15 +11,16 @@
 (o,i,e) => { return r(o,e,i,"+switch",[3,4,0],function(o,e,i){return true;}) };
 (o,i,e) => { return r(o,e,i,"allC",[0],function(o,e,i){return (b(o,e,i,[[815,"Field"]],function(o,e,i){return t(o,"Field",i[815],false,false);}));}) };
 (o,i,e) => { return (t(o,"Test","Blub",true,true)) };
-(o,i,e) => { return t(o,"Text",i[4],false,true) };
+(o,i,e) => { return t(o,"Text",i[123456789],false,true) };
 (o,i,e) => { return t(o,"Fuzzy","Contains",true,false) };
 (o,i,e) => { return n(o,"Value",parseInt(i[7]),[false,false,true]) };
 (o,i,e) => { return n(o,"Value",-7,[true,false]) };
-(o,i,e) => { return n(o,"Value",7,[false,false,false]) };
+(o,i,e) => { return n(o,"Value",777,[false,false,false]) };
 (o,i,e) => { return t(o,"Name","Bob",true,true) || n(o,"Value",42,[true,true]) };
 (o,i,e) => { return t(o,"Name","Bob",true,true) && n(o,"Value",42,[true,true]) };
 (o,i,e) => { return t(o,"Name","Bob",true,true) || !n(o,"Value",42,[true,true]) && t(o,"Address","Street",true,false) != n(o,"Salary",1000,[false,false,false]) };
 (o,i,e) => { return !(((t(o,"Name","Bob",true,true) || n(o,"Value",42,[true,true])) && t(o,"Address","Street",true,false)) != n(o,"Salary",1000,[false,false,false])) };
 (o,i,e) => { return n(o,"42",42,[true,false]) };
+(o,i,e) => { return n(o,"0815",42,[true,false]) };
 (o,i,e) => { return t(o,"Name","Bob",false,true) != n(o,"Value",42,[true,true]) };
 (o,i,e) => { return !t(o,"Name","Bob",false,false) };

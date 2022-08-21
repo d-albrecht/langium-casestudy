@@ -76,18 +76,18 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "$type": "Alternatives",
                 "elements": [
                   {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "Keyword",
-                        "value": "|"
-                      },
-                      {
-                        "$type": "Keyword",
-                        "value": "|",
-                        "cardinality": "?"
-                      }
-                    ]
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$refText": "PIPE"
+                    },
+                    "arguments": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$refText": "PP"
+                    },
+                    "arguments": []
                   },
                   {
                     "$type": "RuleCall",
@@ -147,18 +147,18 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "$type": "Alternatives",
                 "elements": [
                   {
-                    "$type": "Group",
-                    "elements": [
-                      {
-                        "$type": "Keyword",
-                        "value": "&"
-                      },
-                      {
-                        "$type": "Keyword",
-                        "value": "&",
-                        "cardinality": "?"
-                      }
-                    ]
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$refText": "AMP"
+                    },
+                    "arguments": []
+                  },
+                  {
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$refText": "AMS"
+                    },
+                    "arguments": []
                   },
                   {
                     "$type": "RuleCall",
@@ -267,8 +267,11 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "$type": "Alternatives",
                 "elements": [
                   {
-                    "$type": "Keyword",
-                    "value": "!"
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$refText": "BANG"
+                    },
+                    "arguments": []
                   },
                   {
                     "$type": "RuleCall",
@@ -379,7 +382,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "Brule"
+              "$refText": "RCrule"
             },
             "arguments": []
           },
@@ -393,7 +396,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "RCrule"
+              "$refText": "Brule"
             },
             "arguments": []
           }
@@ -421,23 +424,11 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "feature": "field",
             "operator": "=",
             "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "FIELD"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "NAT"
-                  },
-                  "arguments": []
-                }
-              ]
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Field"
+              },
+              "arguments": []
             }
           },
           {
@@ -449,23 +440,11 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "feature": "comp",
             "operator": "=",
             "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "TCOMP"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "COMP"
-                  },
-                  "arguments": []
-                }
-              ]
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Tcomp"
+              },
+              "arguments": []
             }
           },
           {
@@ -479,268 +458,6 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
               },
               "arguments": []
             }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Nrule",
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "{"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "field",
-            "operator": "=",
-            "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "FIELD"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "NAT"
-                  },
-                  "arguments": []
-                }
-              ]
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "}"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "comp",
-            "operator": "=",
-            "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "LTE"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "GTE"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "COMP"
-                  },
-                  "arguments": []
-                }
-              ]
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "val",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Nval"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Brule",
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "binds",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Binds"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "~>"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "group",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Group"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Rrule",
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "/"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "quant",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Quantifier"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "/"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "pred",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Rpred"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "RCrule",
-      "alternatives": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "\\\\"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "quant",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Quantifier"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "\\\\"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "pred",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Group"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Rpred",
-      "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Group"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Keyword",
-                "value": "("
-              },
-              {
-                "$type": "Keyword",
-                "value": ")"
-              }
-            ]
           }
         ]
       },
@@ -777,6 +494,65 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
               "$type": "RuleCall",
               "rule": {
                 "$refText": "Bid"
+              },
+              "arguments": []
+            }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Nrule",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "{"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "field",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Field"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "}"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "comp",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Ncomp"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "val",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Nval"
               },
               "arguments": []
             }
@@ -831,22 +607,78 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
+      "name": "RCrule",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "GT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Assignment",
+            "feature": "quant",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Quantifier"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "LT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Assignment",
+            "feature": "pred",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Group"
+              },
+              "arguments": []
+            }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Quantifier",
       "alternatives": {
         "$type": "Alternatives",
         "elements": [
           {
             "$type": "Assignment",
-            "feature": "f",
+            "feature": "fun",
             "operator": "=",
             "terminal": {
-              "$type": "Keyword",
-              "value": "!"
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "BANG"
+              },
+              "arguments": []
             }
           },
           {
             "$type": "Assignment",
-            "feature": "f",
+            "feature": "fun",
             "operator": "=",
             "terminal": {
               "$type": "Keyword",
@@ -863,14 +695,17 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$refText": "SignedNat"
+                    "$refText": "Int"
                   },
                   "arguments": []
                 }
               },
               {
-                "$type": "Keyword",
-                "value": "~"
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "TILDE"
+                },
+                "arguments": []
               },
               {
                 "$type": "Assignment",
@@ -879,7 +714,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$refText": "SignedNat"
+                    "$refText": "Int"
                   },
                   "arguments": []
                 }
@@ -896,7 +731,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$refText": "SignedNat"
+                    "$refText": "Int"
                   },
                   "arguments": []
                 }
@@ -908,12 +743,146 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$refText": "TREND"
+                    "$refText": "Trend"
                   },
                   "arguments": []
                 }
               }
             ]
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Rrule",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "LT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Assignment",
+            "feature": "quant",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Quantifier"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "GT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Assignment",
+            "feature": "pred",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Rpred"
+              },
+              "arguments": []
+            }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Rpred",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Group"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "("
+              },
+              {
+                "$type": "Keyword",
+                "value": ")"
+              }
+            ]
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Brule",
+      "alternatives": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "let",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Binds"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "ARW"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "Assignment",
+            "feature": "body",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Group"
+              },
+              "arguments": []
+            }
           }
         ]
       },
@@ -934,12 +903,19 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "$type": "Group",
             "elements": [
               {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "ATT"
+                },
+                "arguments": []
+              },
+              {
                 "$type": "Keyword",
-                "value": "@@("
+                "value": "("
               },
               {
                 "$type": "Assignment",
-                "feature": "fields",
+                "feature": "bindings",
                 "operator": "+=",
                 "terminal": {
                   "$type": "RuleCall",
@@ -979,31 +955,22 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "@"
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "AT"
+            },
+            "arguments": []
           },
           {
             "$type": "Assignment",
             "feature": "field",
             "operator": "=",
             "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "FIELD"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "NAT"
-                  },
-                  "arguments": []
-                }
-              ]
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Field"
+              },
+              "arguments": []
             }
           },
           {
@@ -1060,7 +1027,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
-      "name": "SignedNat",
+      "name": "Int",
       "alternatives": {
         "$type": "Group",
         "elements": [
@@ -1069,8 +1036,11 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "feature": "sign",
             "operator": "?=",
             "terminal": {
-              "$type": "Keyword",
-              "value": "-"
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "MINUS"
+              },
+              "arguments": []
             },
             "cardinality": "?"
           },
@@ -1081,7 +1051,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "NAT"
+                "$refText": "Nat"
               },
               "arguments": []
             }
@@ -1097,31 +1067,59 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "ParserRule",
-      "name": "Int",
+      "name": "Field",
+      "dataType": "string",
       "alternatives": {
-        "$type": "Group",
+        "$type": "Alternatives",
         "elements": [
           {
-            "$type": "Assignment",
-            "feature": "sign",
-            "operator": "?=",
-            "terminal": {
-              "$type": "Keyword",
-              "value": "-"
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "FIELD"
             },
-            "cardinality": "?"
+            "arguments": []
           },
           {
-            "$type": "Assignment",
-            "feature": "val",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "NAT"
-              },
-              "arguments": []
-            }
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "AND"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NOT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "OR"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "XOR"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NAT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NUM"
+            },
+            "arguments": []
           }
         ]
       },
@@ -1133,21 +1131,354 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
       "wildcard": false
     },
     {
+      "$type": "ParserRule",
+      "name": "Nat",
+      "dataType": "number",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NAT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NUM"
+            },
+            "arguments": []
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Ncomp",
+      "dataType": "string",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "LT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "GT"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "EQ"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "LTE"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "GTE"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NE"
+            },
+            "arguments": []
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Tcomp",
+      "dataType": "string",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "EQ"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "FZY"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NE"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "NFZ"
+            },
+            "arguments": []
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Trend",
+      "dataType": "string",
+      "alternatives": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "MINUS"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "PLUS"
+            },
+            "arguments": []
+          }
+        ],
+        "cardinality": "?"
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
       "$type": "TerminalRule",
-      "name": "NOT",
+      "name": "AMS",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[nN][oO][tT]"
+        "regex": "&&"
       },
       "fragment": false,
       "hidden": false
     },
     {
       "$type": "TerminalRule",
-      "name": "XOR",
+      "name": "ARW",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[xX][oO][rR]"
+        "regex": "~>"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "ATT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "@@"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "EQ",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "=="
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "FZY",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "=~"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "GTE",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": ">="
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "LTE",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "<="
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "NE",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "!="
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "NFZ",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "!~"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "PP",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\|\\\\|"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "AMP",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "&"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "AT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "@"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "BANG",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "!"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "GT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": ">"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "LT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "<"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "MINUS",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "-"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "PLUS",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\+"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "PIPE",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "\\\\|"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "TILDE",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "~"
       },
       "fragment": false,
       "hidden": false
@@ -1164,6 +1495,16 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
+      "name": "NOT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "[nN][oO][tT]"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
       "name": "OR",
       "terminal": {
         "$type": "RegexToken",
@@ -1174,64 +1515,10 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
-      "name": "TCOMP",
+      "name": "XOR",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[!=]~"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "LTE",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "<(=)?"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "GTE",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": ">(=)?"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "COMP",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "[!=]="
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "FIELD",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "[a-zA-Z_][a-zA-Z0-9_ ]*|([0-9]+[a-zA-Z_]+)+[0-9]*"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "NAT",
-      "type": {
-        "$type": "ReturnType",
-        "name": "number"
-      },
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "[0-9]+"
+        "regex": "[xX][oO][rR]"
       },
       "fragment": false,
       "hidden": false
@@ -1248,10 +1535,30 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
-      "name": "TREND",
+      "name": "NUM",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "[+-.]"
+        "regex": "0[0-9]+"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "NAT",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "0|[1-9][0-9]*"
+      },
+      "fragment": false,
+      "hidden": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "FIELD",
+      "terminal": {
+        "$type": "RegexToken",
+        "regex": "[a-zA-Z_][a-zA-Z0-9_ ]*|([0-9]+[a-zA-Z_]+)+[0-9]*"
       },
       "fragment": false,
       "hidden": false
