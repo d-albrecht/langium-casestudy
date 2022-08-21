@@ -170,6 +170,7 @@ export function isOr(item: unknown): item is Or {
 
 export interface Quantifier extends AstNode {
     readonly $container: RCrule | Rrule;
+    f?: '!' | '?'
     lower?: SignedNat
     pivot?: SignedNat
     trend?: string

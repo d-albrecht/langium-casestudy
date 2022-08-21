@@ -1,4 +1,4 @@
-import { And, Bid, Brule, Group, Int, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Or, Predicate, RCrule, Rrule, Trule, Xor } from '../language-server/generated/ast';
+import { And, Bid, Bind, Binds, Brule, Group, Int, isBind, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Or, Predicate, Quantifier, RCrule, Rrule, SignedNat, Trule, Xor } from '../language-server/generated/ast';
 
 export function visitFilter(filter: Predicate): string {
     //this is a slight adaption of the actual format because Langium accepts several rules per file
@@ -21,7 +21,7 @@ function visitXor(xor: Xor): string {
     }
 }
 
-function visitRules(r: Not): string {
+function visitRules(r: Not | Group): string {
     if (isNot(r) && (r as Not).inner)
         return visitNot(r as Not);
     if (isGroup(r) && (r as Group).rule)
@@ -36,8 +36,7 @@ function visitRules(r: Not): string {
         return visitRrule(r as Rrule);
     if (isRCrule(r))
         return visitRCrule(r as RCrule);
-    console.log(r.$type)
-    return "rule";
+    return "true";
 }
 
 function visitNot(not: Not): string {
@@ -97,18 +96,54 @@ function visitNcomp(comp: string): string {
 }
 
 function visitBrule(b: Brule): string {
-    return "brule";
+    let binds = visitBinds(b.binds);
+    let p = visitRules(b.group);
+    return "b(o,e,i," + binds + ",function(o,e,i){return " + p + ";})";
+}
+
+function visitBinds(b: Binds): string {
+    if (isBind(b))
+        return "[" + visitBind(b) + "]";
+    return "[" + b.fields.map(visitBind).join(",") + "]";
+}
+
+function visitBind(b: Bind): string {
+    return "[" + b.id.id + ",\"" + b.field.toString() + "\"]";
 }
 
 function visitRrule(r: Rrule): string {
-    return "rrule";
+    let q = visitQuantifier(r.quant);
+    let p = visitRules(r.pred);
+    return "r(o,e,i,\"+switch\"," + q + ",function(o,e,i){return " + p + ";})";
 }
 
 function visitRCrule(r: RCrule): string {
-    return "rcrule";
+    let q = visitQuantifier(r.quant);
+    let p = visitRules(r.pred);
+    return "r(o,e,i,\"allC\"," + q + ",function(o,e,i){return " + p + ";})";
 }
 
-function visitInt(int: Int): string {
+function visitQuantifier(q: Quantifier): string {
+    return (q.f) ? ((q.f == "!") ? "[0]" : "[1]") : (
+        (q.lower) ? ("[2," + visitInt(q.lower) + "," + visitInt(q.upper!) + "]") :
+        ("[3," + visitInt(q.pivot!) + "," + visitTrend(q.trend!) + "]")
+    );
+}
+
+function visitTrend(t: string): string {
+    switch (t) {
+        case '+':
+            return "1";
+        case '-':
+            return "-1";
+        case '.':
+            return "0";
+        default:
+            return "error";
+    }
+}
+
+function visitInt(int: Int | SignedNat): string {
     return ((int.sign) ? "-" : "") + int.val.toString()
 }
 

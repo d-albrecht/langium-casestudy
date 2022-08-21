@@ -1,15 +1,15 @@
 "use strict";
 
-(o,i,e) => { return brule };
-(o,i,e) => { return brule };
-(o,i,e) => { return brule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rrule };
-(o,i,e) => { return rcrule };
+(o,i,e) => { return b(o,e,i,[[44,"Test"]],function(o,e,i){return t(o,"Test","Blub",true,true);}) };
+(o,i,e) => { return b(o,e,i,[[42,"444565"]],function(o,e,i){return t(o,"Test","Blub",true,true);}) };
+(o,i,e) => { return b(o,e,i,[[1,"first"],[2,"second"],[4,"third"]],function(o,e,i){return t(o,"Test","Blub",true,true);}) };
+(o,i,e) => { return r(o,e,i,"+switch",[0],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"+switch",[1],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"+switch",[2,4,5],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"+switch",[2,5,-2],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"+switch",[3,4,1],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"+switch",[3,4,0],function(o,e,i){return true;}) };
+(o,i,e) => { return r(o,e,i,"allC",[0],function(o,e,i){return (b(o,e,i,[[815,"Field"]],function(o,e,i){return t(o,"Field",i[815],false,false);}));}) };
 (o,i,e) => { return (t(o,"Test","Blub",true,true)) };
 (o,i,e) => { return t(o,"Text",i[4],false,true) };
 (o,i,e) => { return t(o,"Fuzzy","Contains",true,false) };

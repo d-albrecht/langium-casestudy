@@ -836,12 +836,22 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
         "$type": "Alternatives",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "!"
+            "$type": "Assignment",
+            "feature": "f",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "!"
+            }
           },
           {
-            "$type": "Keyword",
-            "value": "?"
+            "$type": "Assignment",
+            "feature": "f",
+            "operator": "=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "?"
+            }
           },
           {
             "$type": "Group",

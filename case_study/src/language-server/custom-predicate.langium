@@ -24,7 +24,7 @@ Rpred: Group | '(' ')';
 Tval: val=STRING | id=Bid;
 Nval: val=Int | id=Bid;
 //alternatively use the TREND definition instead of lte/gte
-Quantifier: '!' | '?' | lower=SignedNat '~' upper=SignedNat | pivot=SignedNat trend=TREND;
+Quantifier: f='!' | f='?' | lower=SignedNat '~' upper=SignedNat | pivot=SignedNat trend=TREND;
 Binds: '@@(' (fields+=Bind)+ ')' | Bind;
 Bind: '@' field=(FIELD | NAT) id=Bid;
 Bid: '#' id=NAT;
