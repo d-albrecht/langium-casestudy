@@ -429,7 +429,8 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 "$refText": "Field"
               },
               "arguments": []
-            }
+            },
+            "cardinality": "?"
           },
           {
             "$type": "Keyword",
@@ -701,11 +702,16 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
                 }
               },
               {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "TILDE"
-                },
-                "arguments": []
+                "$type": "Assignment",
+                "feature": "range",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "TILDE"
+                  },
+                  "arguments": []
+                }
               },
               {
                 "$type": "Assignment",
@@ -1051,7 +1057,7 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "Nat"
+                "$refText": "NAT"
               },
               "arguments": []
             }
@@ -1111,43 +1117,6 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
             "$type": "RuleCall",
             "rule": {
               "$refText": "NAT"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "NUM"
-            },
-            "arguments": []
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Nat",
-      "dataType": "number",
-      "alternatives": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "NAT"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "NUM"
             },
             "arguments": []
           }
@@ -1535,20 +1504,10 @@ export const CustomPredicateGrammar = (): Grammar => loadedCustomPredicateGramma
     },
     {
       "$type": "TerminalRule",
-      "name": "NUM",
-      "terminal": {
-        "$type": "RegexToken",
-        "regex": "0[0-9]+"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
       "name": "NAT",
       "terminal": {
         "$type": "RegexToken",
-        "regex": "0|[1-9][0-9]*"
+        "regex": "[0-9]+"
       },
       "fragment": false,
       "hidden": false

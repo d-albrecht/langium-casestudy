@@ -13,14 +13,14 @@ Not: (BANG | NOT) inner=Not | Group;
 Group: '(' rule=Or ')' | Rule;
 Rule: Trule | Nrule | RCrule | Rrule | Brule;
 
-Trule: '[' field=Field ']' comp=Tcomp val=Tval;
+Trule: '[' (field=Field)? ']' comp=Tcomp val=Tval;
 Tval: val=STRING | id=Bid;
 
 Nrule: '{' field=Field '}' comp=Ncomp val=Nval;
 Nval: val=Int | id=Bid;
 
 RCrule: GT quant=Quantifier LT pred=Group;
-Quantifier: fun=BANG | fun='?' | lower=Int TILDE upper=Int | pivot=Int trend=Trend;
+Quantifier: fun=BANG | fun='?' | lower=Int range=TILDE upper=Int | pivot=Int trend=Trend;
 
 Rrule: LT quant=Quantifier GT pred=Rpred;
 Rpred: Group | '(' ')';
@@ -30,11 +30,10 @@ Binds: ATT '(' (bindings+=Bind)+ ')' | Bind;
 Bind: AT field=Field id=Bid;
 Bid: '#' id=NAT;
 
-Int: (sign?=MINUS)? val=Nat;
+Int: (sign?=MINUS)? val=NAT;
 
 // terminal collections
-Field returns string: FIELD | AND | NOT | OR | XOR | NAT | NUM;
-Nat returns number: NAT | NUM; // for numbers in NUM-format, all Nats have to be processed with parseInt(Nat).toString() to prevent octal parsing
+Field returns string: FIELD | AND | NOT | OR | XOR | NAT;
 Ncomp returns string: LT | GT | EQ | LTE | GTE | NE;
 Tcomp returns string: EQ | FZY | NE | NFZ;
 Trend returns string: (MINUS | PLUS)?;
@@ -71,8 +70,7 @@ terminal XOR: /[xX][oO][rR]/;
 
 // complex terminals
 terminal STRING: /"[^"]*"|'[^']*'/;
-terminal NUM: /0[0-9]+/; // collection of numbers that would be altered if parsed normally
-terminal NAT: /0|[1-9][0-9]*/;
+terminal NAT: /[0-9]+/;
 terminal FIELD: /[a-zA-Z_][a-zA-Z0-9_ ]*|([0-9]+[a-zA-Z_]+)+[0-9]*/;
 
 // I had to change my definition of field to prevent conflicts with the NAT and NUM definitions.

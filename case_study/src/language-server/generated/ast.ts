@@ -9,8 +9,6 @@ import { AstNode, AstReflection, isAstNode, TypeMetaData } from 'langium';
 
 export type Field = string;
 
-export type Nat = number;
-
 export type Ncomp = string;
 
 export type Predicate = Or;
@@ -122,7 +120,7 @@ export function isGroup(item: unknown): item is Group {
 export interface Int extends AstNode {
     readonly $container: Nval | Quantifier;
     sign: boolean
-    val: Nat
+    val: string
 }
 
 export const Int = 'Int';
@@ -183,6 +181,7 @@ export interface Quantifier extends AstNode {
     fun?: '?' | string
     lower?: Int
     pivot?: Int
+    range?: string
     trend?: Trend
     upper?: Int
 }
@@ -220,7 +219,7 @@ export function isRrule(item: unknown): item is Rrule {
 export interface Trule extends AstNode {
     readonly $container: Brule | Not | RCrule | Rrule | Xor;
     comp: Tcomp
-    field: Field
+    field?: Field
     val: Tval
 }
 

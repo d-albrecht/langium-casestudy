@@ -1,4 +1,4 @@
-import { And, Bid, Bind, Binds, Brule, Group, Int, isBind, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Or, Predicate, Quantifier, RCrule, Rrule, Trule, Xor } from '../language-server/generated/ast';
+import { And, Bind, Binds, Brule, Group, Int, isBind, isBrule, isGroup, isNot, isNrule, isRCrule, isRrule, isTrule, Not, Nrule, Nval, Or, Predicate, Quantifier, RCrule, Rrule, Trule, Tval, Xor } from '../language-server/generated/ast';
 
 export function visitFilter(filter: Predicate): string {
     //this is a slight adaption of the actual format because Langium accepts several rules per file
@@ -48,10 +48,8 @@ function visitGroup(group: Group): string {
 }
 
 function visitTrule(t: Trule): string {
-    let field = "\"" + t.field.toString() + "\"";
-    let val = (t.val.val) ? "\"" + t.val.val + "\"" : visitBid(t.val.id as Bid, false);
-    let comp = visitTcomp(t.comp);
-    return "t(o," + field + "," + val + "," + comp + ")";
+    let field = (t.field) ? "\"" + t.field + "\"" : "null";
+    return "t(o," + field + "," + visitTval(t.val) + "," + visitTcomp(t.comp) + ")";
 }
 
 function visitTcomp(comp: string): string {
@@ -69,11 +67,14 @@ function visitTcomp(comp: string): string {
     }
 }
 
+function visitTval(val: Tval): string {
+    if (val.id)
+    return "i[" + parseInt(val.id.id, 10).toString() + "]";
+    return "\"" + val.val + "\"";
+}
+
 function visitNrule(n: Nrule): string {
-    let field = "\"" + n.field.toString() + "\"";
-    let val = (n.val.val) ? visitInt(n.val.val) : visitBid(n.val.id as Bid, true);
-    let comp = visitNcomp(n.comp);
-    return "n(o," + field + "," + val + "," + comp + ")";
+    return "n(o,\"" + n.field + "\"," + visitNval(n.val) + "," + visitNcomp(n.comp) + ")";
 }
 
 function visitNcomp(comp: string): string {
@@ -95,6 +96,12 @@ function visitNcomp(comp: string): string {
     }
 }
 
+function visitNval(val: Nval): string {
+    if (val.id)
+    return "parseInt(i[" + parseInt(val.id.id, 10).toString() + "])";
+    return visitInt(val.val!);
+}
+
 function visitBrule(b: Brule): string {
     let binds = visitBinds(b.let);
     let p = visitRules(b.body);
@@ -108,11 +115,12 @@ function visitBinds(b: Binds): string {
 }
 
 function visitBind(b: Bind): string {
-    return "[" + b.id.id + ",\"" + b.field.toString() + "\"]";
+    return "[" + parseInt(b.id.id, 10).toString() + ",\"" + b.field + "\"]";
 }
 
 function visitRrule(r: Rrule): string {
     let q = visitQuantifier(r.quant);
+    // the empty bracket case is handled by visitRules
     let p = visitRules(r.pred);
     return "r(o,e,i,\"+switch\"," + q + ",function(o,e,i){return " + p + ";})";
 }
@@ -126,8 +134,8 @@ function visitRCrule(r: RCrule): string {
 function visitQuantifier(q: Quantifier): string {
     // format ints as array [num, sign]
     return (q.fun) ? ((q.fun == "!") ? "[0]" : "[1]") : (
-        (q.lower) ? ("[2," + visitInt(q.lower) + "," + visitInt(q.upper!) + "]") :
-        ("[3," + visitInt(q.pivot!) + "," + visitTrend(q.trend!) + "]")
+        (q.range) ? ("[2," + visitSignedNat(q.lower!) + "," + visitSignedNat(q.upper!) + "]") :
+        ("[3," + visitSignedNat(q.pivot!) + "," + visitTrend(q.trend!) + "]")
     );
 }
 
@@ -138,20 +146,15 @@ function visitTrend(t: string): string {
         case '-':
             return "-1";
         case '.':
-            return "0";
         default:
             return "0";
     }
 }
 
 function visitInt(int: Int): string {
-    return ((int.sign) ? "-" : "") + parseInt(int.val.toString()).toString()
+    return ((int.sign) ? "-" : "") + parseInt(int.val, 10).toString();
 }
 
-function visitBid(bid: Bid, num: boolean): string {
-    if (num) {
-        return "parseInt(i[" + bid.id.toString() + "])";
-    } else {
-        return "i[" + bid.id.toString() + "]";
-    }
+function visitSignedNat(int: Int): string {
+    return "[" + parseInt(int.val, 10).toString() +  "," + (!int.sign) + "]";
 }

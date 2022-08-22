@@ -17,10 +17,10 @@ Hello Alex!*/
 <5~-2>()
 <4+>()
 <4>()
+<4>[Test] =~ "8"
+<4>([Test] =~ "")
 
-/* boolean binary function names are no valid field names anymore!
-{and} == 44*/
-
+{and} == 44
 >!<(@@( @Field#815) ~> [Field] !~ #815)
 
 ([Test] == "Blub")
