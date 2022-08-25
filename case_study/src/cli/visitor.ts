@@ -22,10 +22,6 @@ function visitXor(xor: Xor): string {
 }
 
 function visitRules(r: Not | Group): string {
-    if (isNot(r) && (r as Not).inner)
-        return visitNot(r as Not);
-    if (isGroup(r) && (r as Group).rule)
-        return visitGroup(r as Group);
     if (isTrule(r))
         return visitTrule(r as Trule);
     if (isNrule(r))
@@ -36,6 +32,10 @@ function visitRules(r: Not | Group): string {
         return visitRrule(r as Rrule);
     if (isRCrule(r))
         return visitRCrule(r as RCrule);
+    if (isGroup(r) && (r as Group).rule)
+        return visitGroup(r as Group);
+    if (isNot(r) && (r as Not).inner)
+        return visitNot(r as Not);
     return "true";
 }
 

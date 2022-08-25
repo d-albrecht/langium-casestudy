@@ -1,6 +1,7 @@
 import { ValidationAcceptor, ValidationChecks, ValidationRegistry } from 'langium';
-import { CustomPredicateAstType, Binds } from './generated/ast';
+import { CustomPredicateAstType, Predicate } from './generated/ast';
 import type { CustomPredicateServices } from './custom-predicate-module';
+import { validate } from './binding-validator';
 
 /**
  * Registry for validation checks.
@@ -10,7 +11,7 @@ export class CustomPredicateValidationRegistry extends ValidationRegistry {
         super(services);
         const validator = services.validation.CustomPredicateValidator;
         const checks: ValidationChecks<CustomPredicateAstType> = {
-            Binds: validator.checkPersonStartsWithCapital
+            Predicate: validator.checkAvailabeBindings
         };
         this.register(checks, validator);
     }
@@ -21,7 +22,8 @@ export class CustomPredicateValidationRegistry extends ValidationRegistry {
  */
 export class CustomPredicateValidator {
 
-    checkPersonStartsWithCapital(person: Binds, accept: ValidationAcceptor): void {
+    checkAvailabeBindings(predicate: Predicate, accept: ValidationAcceptor): void {
+        validate(predicate, accept);
         /*if (person.name) {
             const firstChar = person.name.substring(0, 1);
             if (firstChar.toUpperCase() !== firstChar) {
